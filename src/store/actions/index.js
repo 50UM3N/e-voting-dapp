@@ -1,3 +1,3 @@
-import { addWeb3, removeWeb3 } from "./web3-action";
+import { web3Success, web3Loading, web3Error } from "./web3-action";
 
-export { addWeb3, removeWeb3 };
+export { web3Success, web3Loading, web3Error };

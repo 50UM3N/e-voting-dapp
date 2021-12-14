@@ -1,11 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import Web3 from "web3";
 
 const useWeb3 = ({ abi, networks }) => {
-    const [web3, setWeb3] = useState(null);
-    const [contract, setContract] = useState(null);
-    const [isPending, setIsPending] = useState(true);
-
     useEffect(() => {
         const func = async () => {
             let contractABI = abi;
