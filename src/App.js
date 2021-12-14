@@ -1,33 +1,22 @@
 import { useEffect } from "react";
-import { web3Success, web3Loading, web3Error } from "./store/actions";
+import { setWeb3 } from "./store/thunk/setWeb3";
 import { connect } from "react-redux";
-function App({ web3, loading, success, error }) {
+function App({ web3, eVotingContract, setWeb3 }) {
     console.log(web3);
     useEffect(() => {
-        loading();
-        fetch("https://jsonplaceholder.typicasdasdode.com/todasdos/1")
-            .then((response) => response.json())
-            .then((json) => success(json))
-            .catch((e) => error(e.message));
-    }, []);
+        setWeb3();
+    }, [setWeb3]);
     return <div className="App"></div>;
 }
 const mapStateToProps = (state) => {
     return {
         web3: state.web3Reducer,
+        eVotingContract: state.contractReducer,
     };
 };
 const mapDispatchToProps = (dispatch) => {
     return {
-        loading: () => {
-            dispatch(web3Loading());
-        },
-        success: (web3) => {
-            dispatch(web3Success(web3));
-        },
-        error: (err) => {
-            dispatch(web3Error(err));
-        },
+        setWeb3: () => dispatch(setWeb3(154)),
     };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(App);
