@@ -1,7 +1,7 @@
 import { web3Loading, web3Error, web3Success } from "../actions/web3-action";
 import { contractSuccess } from "../actions/contract-action";
 import Web3 from "web3";
-export const setWeb3 = ({ abi, address }) => {
+export const setWeb3 = (abi, address) => {
     return async (dispatch) => {
         dispatch(web3Loading());
         let web3 = null;
