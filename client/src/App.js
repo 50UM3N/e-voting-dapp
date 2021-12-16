@@ -6,6 +6,7 @@ import { SampleForm } from "./Components/Forms/SampleForm";
 import { Routes, Route } from "react-router-dom";
 import Home from "./Routes/Home.js";
 import Login from "./Routes/Login.js";
+import Navbar from "./Components/Navbar.js";
 
 //<></> is called fragment
 
