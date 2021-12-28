@@ -1,9 +1,24 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { connect } from "react-redux";
 import { setWeb3 } from "../../store/thunk/setWeb3";
 import metamasklogo from "../../Assets/MetaMask.png";
 import eVotingArtifact from "../../artifact/evoting.json";
-function Login({ setWeb3 }) {
+function Login({ setWeb3, web3 }) {
+    let location = useLocation();
+    let navigate = useNavigate();
+    const handleLogin = () => {
+        setWeb3();
+    };
+    useEffect(() => {
+        let { from } = location.state || {
+            from: { pathname: "/" },
+        };
+        console.log(from);
+        if (web3.loading == false && web3.web3 !== null) {
+            navigate(from.pathname);
+        }
+    }, [web3]);
     return (
         <div className="container login-container py-5">
             <div className="card-wrapper">
@@ -15,19 +30,26 @@ function Login({ setWeb3 }) {
                         <img src={metamasklogo} alt="meta mask" />
                     </div>
                     <div className="right-buttons-wrapper">
-                        <button className="btn btn-mm " onClick={setWeb3}>
+                        <button className="btn btn-mm " onClick={handleLogin}>
                             Connect to MetaMask
                         </button>
                         <p className="text-muted">Chrome, FireFox, Brave</p>
                     </div>
                 </div>
                 <p className="text-muted m-5">
-                    Confused by these options? <a href="#">Learn more</a>
+                    Confused by these options?{" "}
+                    <Link to="/learn-more">Learn more</Link>
                 </p>
             </div>
         </div>
     );
 }
+
+const matchStateToProps = (state) => {
+    return {
+        web3: state.web3Reducer,
+    };
+};
 
 const mapDispatchToProps = (dispatch) => {
     return {
@@ -40,4 +62,4 @@ const mapDispatchToProps = (dispatch) => {
             ),
     };
 };
-export default connect(null, mapDispatchToProps)(Login);
+export default connect(matchStateToProps, mapDispatchToProps)(Login);
