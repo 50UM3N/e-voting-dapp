@@ -3,22 +3,34 @@ import { setWeb3 } from "./store/thunk/setWeb3";
 import { connect } from "react-redux";
 import eVotingArtifact from "./artifact/evoting.json";
 import { SampleForm } from "./Components/Forms/SampleForm";
-function App({ web3, eVotingContract, setWeb3 }) {
+import { Routes, Route } from "react-router-dom";
+import Home from "./Routes/Home.js";
+import Login from "./Routes/Login.js";
+import Navbar from "./Components/Navbar.js";
+
+//<></> is called fragment
+
+function App({ setWeb3 }) {
     useEffect(() => {
         setWeb3();
     }, [setWeb3]);
     return (
-        <div className="App">
-            <SampleForm />
-        </div>
+        <>
+            <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/login" element={<Login />} />
+            </Routes>
+        </>
     );
 }
-const mapStateToProps = (state) => {
-    return {
-        web3: state.web3Reducer,
-        eVotingContract: state.contractReducer,
-    };
-};
+
+// const mapStateToProps = (state) => {
+//     return {
+//         web3: state.web3Reducer,
+//         eVotingContract: state.contractReducer,
+//     };
+// };
+
 const mapDispatchToProps = (dispatch) => {
     return {
         setWeb3: () =>
@@ -30,4 +42,4 @@ const mapDispatchToProps = (dispatch) => {
             ),
     };
 };
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default connect(null, mapDispatchToProps)(App);
