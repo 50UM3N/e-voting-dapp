@@ -1,19 +1,8 @@
-import { useEffect } from "react";
-import { setWeb3 } from "./store/thunk/setWeb3";
-import { connect } from "react-redux";
-import eVotingArtifact from "./artifact/evoting.json";
-import { SampleForm } from "./Components/Forms/SampleForm";
 import { Routes, Route } from "react-router-dom";
 import Home from "./Routes/Home.js";
-import Login from "./Routes/Login.js";
-import Navbar from "./Components/Navbar.js";
+import Login from "./Routes/Auth/Login.js";
 
-//<></> is called fragment
-
-function App({ setWeb3 }) {
-    useEffect(() => {
-        setWeb3();
-    }, [setWeb3]);
+function App() {
     return (
         <>
             <Routes>
@@ -31,15 +20,4 @@ function App({ setWeb3 }) {
 //     };
 // };
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        setWeb3: () =>
-            dispatch(
-                setWeb3(
-                    eVotingArtifact.abi,
-                    eVotingArtifact.networks[5777].address
-                )
-            ),
-    };
-};
-export default connect(null, mapDispatchToProps)(App);
+export default App;
