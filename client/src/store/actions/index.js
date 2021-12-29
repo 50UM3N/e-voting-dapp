@@ -1,4 +1,4 @@
-import { web3Success, web3Loading, web3Error, setWeb3 } from "./web3-action";
+import { web3Success, web3Loading, web3Error } from "./web3-action";
 import {
     contractError,
     contractLoading,
@@ -8,7 +8,6 @@ export {
     web3Success,
     web3Loading,
     web3Error,
-    setWeb3,
     contractError,
     contractLoading,
     contractSuccess,
