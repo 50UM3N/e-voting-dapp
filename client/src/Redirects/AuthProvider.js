@@ -4,7 +4,6 @@ import { connect } from "react-redux";
 
 function AuthProvider({ web3 }) {
     let location = useLocation();
-    console.log(web3.web3);
     if (!web3.web3) return <Navigate to="/login" state={{ from: location }} />;
     return <Outlet />;
 }
