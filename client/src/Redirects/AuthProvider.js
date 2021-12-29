@@ -9,6 +9,7 @@ import {
 } from "../store/actions";
 import eVotingArtifact from "../artifact/evoting.json";
 import Web3 from "web3";
+import { Loader } from "../Components/Loader";
 
 function AuthProvider({ web3, contractSuccess, web3Success, web3Error }) {
     let location = useLocation();
@@ -44,15 +45,16 @@ function AuthProvider({ web3, contractSuccess, web3Success, web3Error }) {
             setLoading(false);
         })();
     }, [contractSuccess, web3Success, web3Error]);
-    if (loading) {
-        return <p>Loading...</p>;
-    } else if (web3.error) {
-        return <p>Error...</p>;
-    } else if (web3.web3) {
-        return <Outlet />;
-    } else {
-        return <Navigate to="/login" state={{ from: location }} />;
-    }
+    return <Loader />;
+    // if (loading) {
+    //     return <p>Loading...</p>;
+    // } else if (web3.error) {
+    //     return <p>Error...</p>;
+    // } else if (web3.web3) {
+    //     return <Outlet />;
+    // } else {
+    //     return <Navigate to="/login" state={{ from: location }} />;
+    // }
 }
 const mapStateToProps = (state) => {
     return {
