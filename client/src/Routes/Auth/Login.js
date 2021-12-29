@@ -14,7 +14,7 @@ function Login({ setWeb3, web3 }) {
         let { from } = location.state || {
             from: { pathname: "/" },
         };
-        if (web3.loading == false && web3.web3 !== null) {
+        if (web3.loading === false && web3.web3 !== null) {
             navigate(from.pathname);
         }
     }, [web3]);

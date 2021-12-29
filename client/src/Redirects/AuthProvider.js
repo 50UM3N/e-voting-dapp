@@ -1,5 +1,5 @@
 import { Navigate, useLocation, Outlet } from "react-router-dom";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import {
     web3Loading,
@@ -10,22 +10,19 @@ import {
 import eVotingArtifact from "../artifact/evoting.json";
 import Web3 from "web3";
 
-function AuthProvider({
-    web3,
-    contractSuccess,
-    web3Success,
-    web3Error,
-    web3Loading,
-}) {
+function AuthProvider({ web3, contractSuccess, web3Success, web3Error }) {
     let location = useLocation();
+    const [loading, setLoading] = useState(true);
     useEffect(() => {
         (async function () {
-            web3Loading();
             const { abi, address } = eVotingArtifact;
             let web3 = null;
             if (window.ethereum) {
-                if (!window.ethereum.selectedAddress) {
-                    web3Success(null);
+                let add = await window.ethereum.request({
+                    method: "eth_accounts",
+                });
+                if (add.length === 0) {
+                    setLoading(false);
                     return;
                 }
                 try {
@@ -35,6 +32,7 @@ function AuthProvider({
                     web3 = new Web3(window.ethereum);
                 } catch (e) {
                     web3Error(e.message);
+                    setLoading(false);
                     return;
                 }
             } else if (window.web3) {
@@ -43,19 +41,18 @@ function AuthProvider({
             let contract = new web3.eth.Contract(abi, address);
             contractSuccess(contract);
             web3Success(web3);
+            setLoading(false);
         })();
-    }, [web3]);
-    return (
-        <>
-            {web3.loading && <p>Loading...</p>}
-            {web3.error && <p>Error...</p>}
-            {web3.web3 ? (
-                <Outlet />
-            ) : (
-                <Navigate to="/login" state={{ from: location }} />
-            )}
-        </>
-    );
+    }, [contractSuccess, web3Success, web3Error]);
+    if (loading) {
+        return <p>Loading...</p>;
+    } else if (web3.error) {
+        return <p>Error...</p>;
+    } else if (web3.web3) {
+        return <Outlet />;
+    } else {
+        return <Navigate to="/login" state={{ from: location }} />;
+    }
 }
 const mapStateToProps = (state) => {
     return {
