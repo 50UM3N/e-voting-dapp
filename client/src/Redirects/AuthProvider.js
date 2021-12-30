@@ -40,6 +40,7 @@ function AuthProvider({ web3, contractSuccess, web3Success, web3Error }) {
                 web3 = new Web3(window.web3.currentProvider);
             } else web3 = new Web3("http://127.0.0.1:9545/");
             let contract = new web3.eth.Contract(abi, address);
+            // TODO later user fetch add from ethereum
             contractSuccess(contract);
             web3Success(web3);
             setLoading(false);
