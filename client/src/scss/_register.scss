@@ -1,0 +1,43 @@
+.register-wrapper {
+    min-height: 100vh;
+    .row {
+        min-height: 100vh;
+    }
+}
+
+.register-wrapper {
+    .left-wrapper {
+        background: url("../Assets/ethereum.png");
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
+        background-size: 70%;
+        background-color: $primary;
+        display: flex;
+        justify-content: center;
+        .link-container {
+            margin-top: auto;
+            padding: 1.5rem 0rem;
+            list-style: none;
+            text-decoration: none;
+            color: white;
+            font-weight: 500;
+            font-size: 0.95rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            li + li {
+                margin-left: 0.5rem;
+            }
+        }
+    }
+    .right-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        .register-form {
+            width: 100%;
+            max-width: 500px;
+        }
+    }
+}

@@ -6,12 +6,19 @@ import {
     web3Success,
     web3Error,
     contractSuccess,
+    userAdd,
 } from "../store/actions";
 import eVotingArtifact from "../artifact/evoting.json";
 import Web3 from "web3";
 import { Loader } from "../Components/Loader";
 
-function AuthProvider({ web3, contractSuccess, web3Success, web3Error }) {
+function AuthProvider({
+    web3,
+    contractSuccess,
+    web3Success,
+    web3Error,
+    userAdd,
+}) {
     let location = useLocation();
     const [loading, setLoading] = useState(true);
     useEffect(() => {
@@ -41,6 +48,11 @@ function AuthProvider({ web3, contractSuccess, web3Success, web3Error }) {
             } else web3 = new Web3("http://127.0.0.1:9545/");
             let contract = new web3.eth.Contract(abi, address);
             // TODO later user fetch add from ethereum
+            // userAdd({
+            //     id: 12,
+            //     name: "Soumen Khara",
+            //     uuid: 4584259421694,
+            // });
             contractSuccess(contract);
             web3Success(web3);
             setLoading(false);
@@ -75,6 +87,9 @@ const mapDispatchToProps = (dispatch) => {
         },
         contractSuccess: (contract) => {
             dispatch(contractSuccess(contract));
+        },
+        userAdd: (user) => {
+            dispatch(userAdd(user));
         },
     };
 };
