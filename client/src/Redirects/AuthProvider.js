@@ -45,16 +45,15 @@ function AuthProvider({ web3, contractSuccess, web3Success, web3Error }) {
             setLoading(false);
         })();
     }, [contractSuccess, web3Success, web3Error]);
-    return <Loader />;
-    // if (loading) {
-    //     return <p>Loading...</p>;
-    // } else if (web3.error) {
-    //     return <p>Error...</p>;
-    // } else if (web3.web3) {
-    //     return <Outlet />;
-    // } else {
-    //     return <Navigate to="/login" state={{ from: location }} />;
-    // }
+    if (loading) {
+        return <Loader />;
+    } else if (web3.error) {
+        return <p>{web3.error}</p>;
+    } else if (web3.web3) {
+        return <Outlet />;
+    } else {
+        return <Navigate to="/login" state={{ from: location }} />;
+    }
 }
 const mapStateToProps = (state) => {
     return {

@@ -5,6 +5,17 @@ body,
     width: 100%;
     min-height: 100vh;
 }
+.loading-wrapper {
+    background-color: #edf2f6;
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    img {
+        width: 150px;
+    }
+}
 .btn-primary {
     color: white;
     &:hover,
