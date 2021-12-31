@@ -1,5 +1,5 @@
 import { useState } from "react";
-// required|number|string|email|confirm_password
+// required|number|string|email|confirm_password|name|mobile|age18|UIDAI
 const prevStateConverter = (data, old = null) => {
     if (old !== null) {
         for (let [key] of Object.entries(data)) {
@@ -29,6 +29,38 @@ const useValidate = (value, old = null) => {
         if (typeof value === "string") return { valid: true, message: null };
         else return { valid: false, message: "This field must be a string" };
     };
+
+    const checkValidAge = (value) => {
+        let today = new Date();
+        let birthDate = new Date(value);
+        let age = today.getFullYear() - birthDate.getFullYear();
+        if (age >= 18) return { valid: true, message: null };
+        else return { valid: false, message: "You are underaged" };
+    };
+
+    const checkMobile = (value) => {
+        console.log(value.length);
+        if (value.length === 10) return { valid: true, message: null };
+        else
+            return {
+                valid: false,
+                message: "Please enter a valid Mobile Number",
+            };
+    };
+
+    const checkUIDAI = (value) => {
+        if (value.length === 12)
+            return {
+                valid: true,
+                message: null,
+            };
+        else
+            return {
+                valid: false,
+                message: "Please enter a valid UIDAI Number",
+            };
+    };
+
     const checkEmail = (value) => {
         if (/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value))
             return { valid: true, message: null };
@@ -72,6 +104,15 @@ const useValidate = (value, old = null) => {
                     break;
                 case "email":
                     validMsg = checkEmail(value);
+                    break;
+                case "age18":
+                    validMsg = checkValidAge(value);
+                    break;
+                case "mobile":
+                    validMsg = checkMobile(value);
+                    break;
+                case "UIDAI":
+                    validMsg = checkUIDAI(value);
                     break;
                 case "confirm_password":
                     validMsg = checkConfirmPassword(
