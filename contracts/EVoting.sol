@@ -3,22 +3,22 @@ pragma solidity >=0.7.0 <0.9.0;
 
 contract evoting {
     struct Voter {
-        bytes32 fname;
-        bytes32 lname;
-        bytes32 email;
+        string fname;
+        string lname;
+        string email;
         uint256 dob;
-        bytes32 mobile;
-        bytes32 uidai;
-        bytes32 role;
+        string mobile;
+        string uidai;
+        string role;
         bool verified;
         bool voted;
         uint256 vote;
     }
-
+    address admin;
     struct Team {
-        bytes32 representative;
-        bytes32 description;
-        bytes32 teamName;
+        string representative;
+        string description;
+        string teamName;
         uint256 voteCount;
     }
 
@@ -28,57 +28,34 @@ contract evoting {
 
     event AddVoter(Voter _voter);
 
-    constructor(
-        bytes32 fname,
-        bytes32 lname,
-        bytes32 email,
-        uint256 dob,
-        bytes32 mobile,
-        bytes32 uidai
-    ) {
-        address admin = msg.sender;
-        voters[admin].fname = bytes32(fname);
-        voters[admin].lname = bytes32(lname);
-        voters[admin].email = bytes32(email);
+
+    //"Soumen", "Khara", "soumen@gmail.com", 931113000000,"8945612397","12345678900"
+    constructor(string memory fname,string memory lname,string memory email,uint256 dob,string memory mobile,string memory uidai) {
+        admin = msg.sender;
+        voters[admin].fname = fname;
+        voters[admin].lname = lname;
+        voters[admin].email = email;
         voters[admin].dob = dob;
-        voters[admin].mobile = bytes32(mobile);
-        voters[admin].uidai = bytes32(uidai);
+        voters[admin].mobile = mobile;
+        voters[admin].uidai = uidai;
         voters[admin].verified = true;
-        voters[admin].role = bytes32("admin");
+        voters[admin].role = "admin";
     }
 
     event AddTeam(Team _team);
 
-    function addTeam(
-        bytes32 representative,
-        bytes32 description,
-        bytes32 teamName
-    ) public {
-        require(
-            voters[msg.sender].role == "admin",
-            "Only admin can add new teams"
-        );
-        teams.push(
-            Team({
-                representative: representative,
-                description: description,
-                teamName: teamName,
-                voteCount: 0
-            })
-        );
-        emit AddTeam(teams[teams.length - 1]);
+    function addTeam(string memory  representative, string  memory description,    string memory teamName) public {
+            require(
+                msg.sender == admin,
+                "Only admin can add new teams"
+            );
+            teams.push(Team({representative: representative, description: description,teamName:teamName,voteCount: 0}));
+            emit AddTeam(teams[teams.length - 1]);
     }
 
     event Register(Voter _voter);
 
-    function register(
-        bytes32 fname,
-        bytes32 lname,
-        bytes32 email,
-        uint256 dob,
-        bytes32 mobile,
-        bytes32 uidai
-    ) public {
+    function register(string  memory  fname,string  memory  lname,string  memory email,uint256 dob,string memory  mobile,string memory  uidai) public {
         address voter = msg.sender;
         // check that a user is already exist or not;
         voters[voter].fname = fname;
@@ -125,7 +102,7 @@ contract evoting {
     //     }
     // }
 
-    // function getWinner() public view returns (bytes32 _winner) {
+    // function getWinner() public view returns (string _winner) {
     //     _winner = teams[getWinnerIndex()].name;
     // }
 }
