@@ -64,7 +64,7 @@ function AuthProvider({
             web3Success(web3);
             setLoading(false);
         })();
-    }, [contractSuccess, web3Success, web3Error]);
+    }, [contractSuccess, web3Success, web3Error, userAdd]);
     if (loading) {
         return <Loader />;
     } else if (web3.error) {

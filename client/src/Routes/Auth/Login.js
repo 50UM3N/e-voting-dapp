@@ -11,13 +11,15 @@ function Login({ setWeb3, web3 }) {
         setWeb3();
     };
     useEffect(() => {
-        let { from } = location.state || {
-            from: { pathname: "/" },
-        };
-        if (web3.loading === false && web3.web3 !== null) {
-            navigate(from.pathname);
-        }
-    }, [web3]);
+        (() => {
+            let { from } = location.state || {
+                from: { pathname: "/" },
+            };
+            if (web3.loading === false && web3.web3 !== null) {
+                navigate(from.pathname);
+            }
+        })();
+    }, [web3, location, navigate]);
     return (
         <div className="container login-container py-5">
             <div className="card-wrapper">
