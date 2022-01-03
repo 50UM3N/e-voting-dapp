@@ -1,36 +1,74 @@
-import React from "react";
+import React, { useState } from "react";
 import useValidate from "../../Hooks/useValidate";
+import { userAdd } from "../../store/actions";
+import { connect } from "react-redux";
 
-export const Register = () => {
+const Register = ({ web3, addUser, voteContract }) => {
     const [formData, formValidator] = useValidate({
-        firstname: { value: "", validate: "required|string", error: null },
-        lastname: { value: "", validate: "required|string", error: null },
-        email: { value: "", validate: "required|email", error: null },
-        dateOfBirth: { value: "", validate: "required|age18", error: null },
+        firstname: {
+            value: "Soumen",
+            validate: "required|string",
+            error: null,
+        },
+        lastname: { value: "Khara", validate: "required|string", error: null },
+        email: {
+            value: "soumen@gmail.com",
+            validate: "required|email",
+            error: null,
+        },
+        dateOfBirth: {
+            value: "05-07-1999",
+            validate: "required|age18",
+            error: null,
+        },
         mobileNo: {
-            value: "",
+            value: "8910103196",
             validate: "required|number|mobile",
             error: null,
         },
         aadhaarNumber: {
-            value: "",
+            value: "891010319600",
             validate: "required|number|UIDAI",
             error: null,
         },
-        password: { value: "", validate: "required", error: null },
     });
-
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
+    const [success, setSuccess] = useState(null);
     const handleChange = (e) => {
         e.preventDefault();
-        console.log(e.target.value);
         formValidator.validOnChange(e.currentTarget);
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(formValidator.validate());
+        if (!formValidator.validate()) return;
+        setLoading(true);
+        setError(null);
+        setSuccess(null);
+        let date = new Date(formData.dateOfBirth.value);
+        let address = await window.ethereum.request({
+            method: "eth_accounts",
+        });
+        voteContract.contract.methods
+            .register(
+                formData.firstname.value,
+                formData.lastname.value,
+                formData.email.value,
+                date.getTime(),
+                formData.mobileNo.value,
+                formData.aadhaarNumber.value
+            )
+            .send({ from: address[0] })
+            .then((data) => {
+                setLoading(false);
+                setSuccess("Successfully register waiting for conformation!!!");
+            })
+            .catch((e) => {
+                setLoading(false);
+                setError("Error while registering");
+            });
     };
-
     return (
         <>
             <div className="register-wrapper">
@@ -45,6 +83,22 @@ export const Register = () => {
                     </div>
                     <div className="col-md-8 p-3 right-wrapper">
                         <form className="register-form" onSubmit={handleSubmit}>
+                            {error && (
+                                <div
+                                    className="alert alert-danger"
+                                    role="alert"
+                                >
+                                    {error}
+                                </div>
+                            )}
+                            {success && (
+                                <div
+                                    className="alert alert-primary"
+                                    role="alert"
+                                >
+                                    {success}
+                                </div>
+                            )}
                             <h1 className="mb-4">New Voter Registration</h1>
                             <div className="mb-3">
                                 <label className="form-label">First Name</label>
@@ -175,7 +229,21 @@ export const Register = () => {
                                     </div>
                                 )}
                             </div>
-                            <button type="submit" className="btn btn-primary">
+                            <button
+                                type="submit"
+                                className="btn btn-primary"
+                                disabled={loading}
+                            >
+                                {loading && (
+                                    <div
+                                        className="spinner-border spinner-border-sm me-2"
+                                        role="status"
+                                    >
+                                        <span className="visually-hidden">
+                                            Loading...
+                                        </span>
+                                    </div>
+                                )}
                                 Register
                             </button>
                         </form>
@@ -185,3 +253,20 @@ export const Register = () => {
         </>
     );
 };
+
+const mapStateToProps = (state) => {
+    return {
+        web3: state.web3Provider,
+        voteContract: state.contractReducer,
+    };
+};
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        setUser: (user) => {
+            dispatch(userAdd(user));
+        },
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Register);

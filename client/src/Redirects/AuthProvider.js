@@ -23,13 +23,13 @@ function AuthProvider({
     const [loading, setLoading] = useState(true);
     useEffect(() => {
         (async function () {
-            const { abi, address } = eVotingArtifact;
+            const { abi, networks } = eVotingArtifact;
             let web3 = null;
             if (window.ethereum) {
-                let add = await window.ethereum.request({
+                let accounts = await window.ethereum.request({
                     method: "eth_accounts",
                 });
-                if (add.length === 0) {
+                if (accounts.length === 0) {
                     setLoading(false);
                     return;
                 }
@@ -46,13 +46,20 @@ function AuthProvider({
             } else if (window.web3) {
                 web3 = new Web3(window.web3.currentProvider);
             } else web3 = new Web3("http://127.0.0.1:9545/");
-            let contract = new web3.eth.Contract(abi, address);
-            // TODO later user fetch add from ethereum
-            // userAdd({
-            //     id: 12,
-            //     name: "Soumen Khara",
-            //     uuid: 4584259421694,
-            // });
+            let contract = new web3.eth.Contract(abi, networks[5777].address);
+            let voter = await contract.methods.getVoter().call();
+            userAdd({
+                dob: new Date(voter.dob),
+                email: voter.email,
+                fname: voter.fname,
+                lname: voter.lname,
+                mobile: voter.mobile,
+                role: voter.role,
+                uidai: voter.uidai,
+                verified: voter.verified,
+                vote: voter.vote,
+                voted: voter.voted,
+            });
             contractSuccess(contract);
             web3Success(web3);
             setLoading(false);
