@@ -39,7 +39,6 @@ const useValidate = (value, old = null) => {
     };
 
     const checkMobile = (value) => {
-        console.log(value.length);
         if (value.length === 10) return { valid: true, message: null };
         else
             return {
