@@ -4,6 +4,8 @@ import Login from "./Routes/Auth/Login.js";
 import AuthProvider from "./Redirects/AuthProvider.js";
 import Profile from "./Routes/User/Profile.js";
 import Register from "./Routes/Auth/Register.js";
+import RegisterProvide from "./Redirects/RegisterProvide.js";
+
 function App() {
     return (
         <>
@@ -11,7 +13,9 @@ function App() {
                 <Route path="/" element={<Home />} />
                 <Route element={<AuthProvider />}>
                     <Route path="/profile" element={<Profile />} />
-                    <Route path="/register" element={<Register />} />
+                    <Route element={<RegisterProvide />}>
+                        <Route path="/register" element={<Register />} />
+                    </Route>
                 </Route>
                 <Route path="/login" element={<Login />} />
             </Routes>

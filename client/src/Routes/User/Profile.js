@@ -4,6 +4,7 @@ import Navbar from "../../Components/Navbar";
 import { Card } from "react-bootstrap";
 import { Link } from "react-router-dom";
 function Profile({ user }) {
+    console.log(user);
     return (
         <>
             <Navbar />
@@ -19,10 +20,31 @@ function Profile({ user }) {
                 <Card>
                     <Card.Body>
                         {user ? (
-                            <p>
-                                {/* TODO: Later here display user details */}
-                                You are register your account in our application
-                            </p>
+                            <>
+                                <div>
+                                    <span
+                                        className="material-icons-two-tone"
+                                        style={{ fontSize: "4rem" }}
+                                    >
+                                        account_circle
+                                    </span>
+                                </div>
+                                <h5 className="card-title">
+                                    {user.fname} {user.lname}{" "}
+                                    {user.verified
+                                        ? "(Verified)"
+                                        : "(Not Verified)"}
+                                </h5>
+                                <hr />
+                                <p className=" mb-0 text-muted">Email</p>
+                                <p>{user.email}</p>
+                                <p className=" mb-0 text-muted">
+                                    Mobile Number
+                                </p>
+                                <p>{user.mobile}</p>
+                                <p className=" mb-0 text-muted">Aadhar ID</p>
+                                <p>{user.uidai}</p>
+                            </>
                         ) : (
                             <p>
                                 Please register first then you will use out

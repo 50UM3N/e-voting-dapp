@@ -25,8 +25,9 @@ function AuthProvider({
         (async function () {
             const { abi, networks } = eVotingArtifact;
             let web3 = null;
+            let accounts;
             if (window.ethereum) {
-                let accounts = await window.ethereum.request({
+                accounts = await window.ethereum.request({
                     method: "eth_accounts",
                 });
                 if (accounts.length === 0) {
@@ -47,19 +48,22 @@ function AuthProvider({
                 web3 = new Web3(window.web3.currentProvider);
             } else web3 = new Web3("http://127.0.0.1:9545/");
             let contract = new web3.eth.Contract(abi, networks[5777].address);
-            let voter = await contract.methods.getVoter().call();
-            userAdd({
-                dob: new Date(voter.dob),
-                email: voter.email,
-                fname: voter.fname,
-                lname: voter.lname,
-                mobile: voter.mobile,
-                role: voter.role,
-                uidai: voter.uidai,
-                verified: voter.verified,
-                vote: voter.vote,
-                voted: voter.voted,
-            });
+            let voter = await contract.methods
+                .getVoter()
+                .call({ from: accounts[0] });
+            if (voter.email)
+                userAdd({
+                    dob: new Date(voter.dob),
+                    email: voter.email,
+                    fname: voter.fname,
+                    lname: voter.lname,
+                    mobile: voter.mobile,
+                    role: voter.role,
+                    uidai: voter.uidai,
+                    verified: voter.verified,
+                    vote: voter.vote,
+                    voted: voter.voted,
+                });
             contractSuccess(contract);
             web3Success(web3);
             setLoading(false);

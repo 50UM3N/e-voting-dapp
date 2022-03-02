@@ -6,28 +6,28 @@ import { connect } from "react-redux";
 const Register = ({ web3, addUser, voteContract }) => {
     const [formData, formValidator] = useValidate({
         firstname: {
-            value: "Soumen",
+            value: "",
             validate: "required|string",
             error: null,
         },
-        lastname: { value: "Khara", validate: "required|string", error: null },
+        lastname: { value: "", validate: "required|string", error: null },
         email: {
-            value: "soumen@gmail.com",
+            value: "",
             validate: "required|email",
             error: null,
         },
         dateOfBirth: {
-            value: "05-07-1999",
+            value: "",
             validate: "required|age18",
             error: null,
         },
         mobileNo: {
-            value: "8910103196",
+            value: "",
             validate: "required|number|mobile",
             error: null,
         },
         aadhaarNumber: {
-            value: "891010319600",
+            value: "",
             validate: "required|number|UIDAI",
             error: null,
         },
