@@ -5,6 +5,8 @@ import AuthProvider from "./Redirects/AuthProvider.js";
 import Profile from "./Routes/User/Profile.js";
 import Register from "./Routes/Auth/Register.js";
 import RegisterProvide from "./Redirects/RegisterProvide.js";
+import AdminProvider from "./Redirects/AdminProvider.js";
+import Request from "./Routes/Request.js";
 
 function App() {
     return (
@@ -15,6 +17,9 @@ function App() {
                     <Route path="/profile" element={<Profile />} />
                     <Route element={<RegisterProvide />}>
                         <Route path="/register" element={<Register />} />
+                    </Route>
+                    <Route element={<AdminProvider />}>
+                        <Route path="/voter-request" element={<Request />} />
                     </Route>
                 </Route>
                 <Route path="/login" element={<Login />} />

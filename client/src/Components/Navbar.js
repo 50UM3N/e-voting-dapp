@@ -19,6 +19,14 @@ const Navbar = () => {
                                     Home
                                 </NavLink>
                             </li>
+                            <li className="nav-item active">
+                                <NavLink
+                                    className="nav-link"
+                                    to="/voter-request"
+                                >
+                                    Voter Request
+                                </NavLink>
+                            </li>
                         </ul>
                         <ul className="navbar-nav">
                             <li className="nav-item">
