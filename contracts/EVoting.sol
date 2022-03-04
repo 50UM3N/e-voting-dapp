@@ -28,17 +28,18 @@ contract evoting {
 
     VoterMap private voterMap;
 
-    /**
-     * voterMapGet function get the voter of a esisting address
-     * @param {VoterMap} map is the storage parameter
-     * @param {address} key This is the key to find a voter
-     * @return {Voter} return the structure voter
-     */
-    function voterMapSize() private view returns (uint256) {
-        return voterMap.keys.length;
-    }
+    // function voterMapSize() private view returns (uint256) {
+    //     return voterMap.keys.length;
+    // }
 
+    /**
+     * voterMapSet function adds a user information
+     * @param  key {address} is the storage parameter
+     * @param  val {Voter} This is the memory parameter containing the info of users
+     */
     function voterMapSet(address key, Voter memory val) private {
+        // If the key is present then add the values of the voter corresponding to that key
+        // Else create a new entry
         if (voterMap.inserted[key]) {
             voterMap.values[key] = val;
         } else {
@@ -49,21 +50,28 @@ contract evoting {
         }
     }
 
+    /**
+     * voterMapRemove function deletes the info of a user
+     * @param  key {address} is the address of the user to be deleted
+     */
     function voterMapRemove(address key) private {
+        // If the key is not inserted then return
         if (!voterMap.inserted[key]) {
             return;
         }
-
+        // If key is present then delete the key and also the values corresponding to that key
         delete voterMap.inserted[key];
         delete voterMap.values[key];
 
-        uint256 index = voterMap.indexOf[key];
-        uint256 lastIndex = voterMap.keys.length - 1;
-        address lastKey = voterMap.keys[lastIndex];
+        uint256 index = voterMap.indexOf[key]; // Take the index of the key to be deleted
+        uint256 lastIndex = voterMap.keys.length - 1; // Take the index of the last element in the key array
+        address lastKey = voterMap.keys[lastIndex]; // Take the address key of the last index
 
-        voterMap.indexOf[lastKey] = index;
-        delete voterMap.indexOf[key];
+        voterMap.indexOf[lastKey] = index; // Change the last key's index with the index of the key to be deleted
+        delete voterMap.indexOf[key]; // Delete the corresponding key index from the indexOf map
 
+        // Replace the lastKey in the key array with the key to be deleted
+        // Pop the last key from the key array
         voterMap.keys[index] = lastKey;
         voterMap.keys.pop();
     }
@@ -86,7 +94,7 @@ contract evoting {
 
     // Teams array contains all the teams
     Team[] public teams;
-
+    // Event of for adding voter
     event AddVoter(Voter _voter);
 
     //"Soumen", "Khara", "soumen@gmail.com", 931113000000,"8945612397","12345678900"
@@ -114,8 +122,15 @@ contract evoting {
         voterMapSet(admin, voter);
     }
 
+    // Event for adding a team
     event AddTeam(Team _team);
 
+    /**
+     * addTeam function adds a team information
+     * @param representative {string} is the memory parameter containing the representative name
+     * @param description {string} is the memory parameter containing the info of team
+     * @param teamName {string} is the memory parameter having the name of the team
+     */
     function addTeam(
         string memory representative,
         string memory description,
@@ -133,8 +148,18 @@ contract evoting {
         emit AddTeam(teams[teams.length - 1]);
     }
 
+    // Event for registering a voter
     event Register(Voter _voter);
 
+    /**
+     * register function registers a normal user
+     * @param fname {string} is the memory parameter containing the first name
+     * @param lname {string} is the memory parameter containing the last name
+     * @param email {string} is the memory parameter having the email id
+     * @param dob {uint256} is the memory parameter having the date of birth of the user
+     * @param mobile {string} is the memory parameter having the mobile number
+     * @param uidai {string} is the memory parameter having the aadhaar number
+     */
     function register(
         string memory fname,
         string memory lname,
@@ -161,16 +186,29 @@ contract evoting {
         emit Register(voter);
     }
 
+    /**
+     * getTeams function returns teams that are participating
+     * @return {Team[]} returns a array containing the info of teams
+     */
     function getTeams() public view returns (Team[] memory) {
         return teams;
     }
 
+    /**
+     * getVoter function returns info about the user
+     * @return {Voter} returns a array containing the info of a user
+     */
     function getVoter() public view returns (Voter memory) {
         return voterMap.values[msg.sender];
     }
 
+    // Event for voted
     event Vote(Voter _voter);
 
+    /**
+     * vote function handles the voting of a user
+     * @param to {uint256} contains the team the user is voitng
+     */
     function vote(uint256 to) public {
         Voter storage voter = voterMap.values[msg.sender];
 
@@ -183,6 +221,10 @@ contract evoting {
         emit Vote(voter);
     }
 
+    /**
+     * getUnverifiedVoter function returns the users who are unverified
+     * @return {Voter[]} returns an array of the user who are unverified
+     */
     function getUnverifiedVoter() public view returns (Voter[] memory) {
         // TODO: Create a pagination type data return
         // INFO: Resolve null value from the voters
