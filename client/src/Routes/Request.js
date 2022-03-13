@@ -2,27 +2,61 @@ import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import Navbar from "../Components/Navbar";
 import Moment from "react-moment";
-const Request = ({ contract }) => {
+import { ToastContainer, toast } from "react-toastify";
+
+const Request = ({ contract, web3 }) => {
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     useEffect(() => {
         (async () => {
-            let accounts = window.ethereum.request({
+            let accounts = await window.ethereum.request({
                 method: "eth_accounts",
             });
             let voters = await contract.contract.methods
                 .getUnverifiedVoter()
-                .call({ from: accounts[5] })
+                .call({ from: accounts[0] })
                 .catch((err) => {
                     setError(err);
                 });
             setData(voters);
             setLoading(false);
         })();
-        return () => {};
     }, [contract]);
-    console.log(data);
+
+    const approvedVoter = async (address) => {
+        let toastOption = {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+        };
+        if (!web3.web3.utils.isAddress(address)) {
+            console.log("invalid address");
+            return;
+        }
+        let accounts = await window.ethereum.request({
+            method: "eth_accounts",
+        });
+        console.log({ from: accounts[0] });
+        contract.contract.methods
+            .verifyVoter(address)
+            .send({ from: accounts[0] })
+            .then((res) => {
+                // !ERROR resolve _message error
+                let message = res.events.VerifyVoter.returnValue._message;
+                console.log(message);
+                setData((state) => state.filter((item) => item.id !== address));
+                // toast.success("Success ", toastOption);
+            })
+            .catch((err) => {
+                console.log(err.message);
+                // toast.error("Error ", toastOption);
+            });
+    };
     return (
         <>
             <Navbar />
@@ -49,19 +83,19 @@ const Request = ({ contract }) => {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {data.map((item) => (
+                                        {data.map((item, index) => (
                                             <tr
                                                 key={item.id}
                                                 className="text-nowrap"
                                             >
-                                                <th scope="row">{item.id}</th>
+                                                <th scope="row">{index + 1}</th>
                                                 <td>{item.uidai}</td>
                                                 <td>{item.fname}</td>
                                                 <td>{item.lname}</td>
                                                 <td>{item.email}</td>
                                                 <td>{item.mobile}</td>
                                                 <td>
-                                                    <Moment format="YYYY/MM/DD">
+                                                    <Moment format="DD/MM/YYYY">
                                                         {
                                                             new Date(
                                                                 Number(item.dob)
@@ -70,7 +104,14 @@ const Request = ({ contract }) => {
                                                     </Moment>
                                                 </td>
                                                 <td>
-                                                    <button className="btn btn-sm btn-primary">
+                                                    <button
+                                                        className="btn btn-sm btn-primary"
+                                                        onClick={() =>
+                                                            approvedVoter(
+                                                                item.id
+                                                            )
+                                                        }
+                                                    >
                                                         Approved
                                                     </button>
                                                 </td>
@@ -81,6 +122,19 @@ const Request = ({ contract }) => {
                             </div>
                         </div>
                     </div>
+                    {/* <ToastContainer
+                        position="top-right"
+                        autoClose={5000}
+                        hideProgressBar={false}
+                        newestOnTop={false}
+                        closeOnClick
+                        rtl={false}
+                        pauseOnFocusLoss
+                        draggable
+                        pauseOnHover
+                    />
+         
+                    <ToastContainer /> */}
                 </div>
             )}
         </>
@@ -90,6 +144,7 @@ const Request = ({ contract }) => {
 const mapStateToProps = (state) => {
     return {
         contract: state.contractReducer,
+        web3: state.web3Reducer,
     };
 };
 export default connect(mapStateToProps)(Request);

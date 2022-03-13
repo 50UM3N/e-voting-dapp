@@ -8,6 +8,7 @@ contract evoting {
     * thar are register
     */
     struct Voter {
+        address id;   // First Name
         string fname;   // First Name
         string lname;   // Last name
         string email;   // Email Address
@@ -91,7 +92,7 @@ contract evoting {
     //"Soumen", "Khara", "soumen@gmail.com", 931113000000,"8945612397","12345678900"
     constructor(string memory fname,string memory lname,string memory email,uint256 dob,string memory mobile,string memory uidai) {
         admin = msg.sender;
-        Voter memory voter = Voter(fname,lname,email,dob,mobile,uidai,"admin",true, false, 0);
+        Voter memory voter = Voter(admin, fname,lname,email,dob,mobile,uidai,"admin",true, false, 0);
         voterMapSet(admin, voter);
     }
 
@@ -111,7 +112,7 @@ contract evoting {
     function register(string  memory  fname,string  memory  lname,string  memory email,uint256 dob,string memory  mobile,string memory  uidai) public {
         address sender = msg.sender;
         // TODO: check that a user is already exist or not
-        Voter memory voter = Voter(fname,lname,email,dob,mobile,uidai,"user",false, false, 0);
+        Voter memory voter = Voter(sender, fname,lname,email,dob,mobile,uidai,"user",false, false, 0);
         voterMapSet(sender, voter);
         emit Register(voter);
     }
@@ -163,6 +164,16 @@ contract evoting {
         return voters;
     }
 
+    event VerifyVoter(string _message);
+    function verifyVoter(address _address) public {
+        require(
+                msg.sender == admin,
+                "Only admin can verify voter"
+            );
+        Voter storage voter =  voterMap.values[_address];
+        voter.verified = true;
+        emit VerifyVoter("Voter update success");
+    }
     
     // function getWinnerIndex() public view returns (uint256 _winner) {
     //     uint256 maxVote = 0;

@@ -7,7 +7,7 @@ import Register from "./Routes/Auth/Register.js";
 import RegisterProvide from "./Redirects/RegisterProvide.js";
 import AdminProvider from "./Redirects/AdminProvider.js";
 import Request from "./Routes/Request.js";
-
+import "react-toastify/dist/ReactToastify.css";
 function App() {
     return (
         <>
