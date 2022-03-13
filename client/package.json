@@ -15,6 +15,7 @@
         "react-redux": "^7.2.6",
         "react-router-dom": "^6.2.1",
         "react-scripts": "4.0.3",
+        "react-toastify": "^8.2.0",
         "redux": "^4.1.2",
         "redux-thunk": "^2.4.1",
         "web-vitals": "^1.1.2",
@@ -43,5 +44,9 @@
             "last 1 firefox version",
             "last 1 safari version"
         ]
+    },
+    "devDependencies": {
+        "moment": "^2.29.1",
+        "react-moment": "^1.1.1"
     }
 }

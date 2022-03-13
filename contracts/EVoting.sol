@@ -2,27 +2,29 @@
 pragma solidity >=0.7.0 <0.9.0;
 
 contract evoting {
+    
     /**
-     * Voting structure that helps to create a map and contain all the voter
-     * thar are register
-     */
+    * Voting structure that helps to create a map and contain all the voter
+    * thar are register
+    */
     struct Voter {
-        string fname; // First Name
-        string lname; // Last name
-        string email; // Email Address
-        uint256 dob; // Date of Birth as integer to store the date time according to JS date time
-        string mobile; // Mobile Number
-        string uidai; // Aadhar Number
-        string role; // Role i.e user or admin
-        bool verified; // Verified flag that help to verifiy the voter details
-        bool voted; // Voted flag to verify that the user give his vote or not
-        uint256 vote; // Index of the voter list the user give vote
+        address id;   // First Name
+        string fname;   // First Name
+        string lname;   // Last name
+        string email;   // Email Address
+        uint256 dob;    // Date of Birth as integer to store the date time according to JS date time
+        string mobile;  // Mobile Number
+        string uidai;   // Aadhar Number
+        string role;    // Role i.e user or admin
+        bool verified;  // Verified flag that help to verifiy the voter details
+        bool voted;     // Voted flag to verify that the user give his vote or not
+        uint256 vote;   // Index of the voter list the user give vote
     }
 
     struct VoterMap {
         address[] keys;
         mapping(address => Voter) values;
-        mapping(address => uint256) indexOf;
+        mapping(address => uint) indexOf;
         mapping(address => bool) inserted;
     }
 
@@ -83,42 +85,23 @@ contract evoting {
     address admin;
 
     /**
-     * Team structure that helps to create an array contains all the teams
-     */
+    * Team structure that helps to create an array contains all the teams 
+    */
     struct Team {
-        string representative; // Name of the representative who stand in behalf to to team
-        string description; // Description of the team
-        string teamName; // Team name
-        uint256 voteCount; // Number of vote
+        string representative;  // Name of the representative who stand in behalf to to team
+        string description;     // Description of the team
+        string teamName;        // Team name
+        uint256 voteCount;      // Number of vote 
     }
 
-    // Teams array contains all the teams
+    // Teams array contains all the teams 
     Team[] public teams;
     // Event of for adding voter
     event AddVoter(Voter _voter);
-
     //"Soumen", "Khara", "soumen@gmail.com", 931113000000,"8945612397","12345678900"
-    constructor(
-        string memory fname,
-        string memory lname,
-        string memory email,
-        uint256 dob,
-        string memory mobile,
-        string memory uidai
-    ) {
+    constructor(string memory fname,string memory lname,string memory email,uint256 dob,string memory mobile,string memory uidai) {
         admin = msg.sender;
-        Voter memory voter = Voter(
-            fname,
-            lname,
-            email,
-            dob,
-            mobile,
-            uidai,
-            "admin",
-            true,
-            false,
-            0
-        );
+        Voter memory voter = Voter(admin, fname,lname,email,dob,mobile,uidai,"admin",true, false, 0);
         voterMapSet(admin, voter);
     }
 
@@ -170,18 +153,7 @@ contract evoting {
     ) public {
         address sender = msg.sender;
         // TODO: check that a user is already exist or not
-        Voter memory voter = Voter(
-            fname,
-            lname,
-            email,
-            dob,
-            mobile,
-            uidai,
-            "user",
-            false,
-            false,
-            0
-        );
+        Voter memory voter = Voter(sender, fname,lname,email,dob,mobile,uidai,"user",false, false, 0);
         voterMapSet(sender, voter);
         emit Register(voter);
     }
@@ -199,6 +171,7 @@ contract evoting {
      * @return {Voter} returns a array containing the info of a user
      */
     function getVoter() public view returns (Voter memory) {
+        
         return voterMap.values[msg.sender];
     }
 
@@ -226,16 +199,39 @@ contract evoting {
      * @return {Voter[]} returns an array of the user who are unverified
      */
     function getUnverifiedVoter() public view returns (Voter[] memory) {
-        // TODO: Create a pagination type data return
-        // INFO: Resolve null value from the voters
-        Voter[] memory voters = new Voter[](voterMap.keys.length);
-        for (uint256 i = 0; i < voterMap.keys.length; i++) {
+        // TODO: Create a pagination type data return 
+        // INFO: Resolve null value from the voters 
+        uint counter = 0 ;
+
+        for(uint i=0; i<voterMap.keys.length;i++){
             Voter memory item = voterMap.values[voterMap.keys[i]];
-            if (!item.verified) voters[i] = item;
+            if(!item.verified)
+                counter++;
+        }
+
+        Voter[] memory voters = new Voter[](counter);
+        uint j = 0; 
+        for(uint i=0; i<voterMap.keys.length;i++){
+            Voter memory item = voterMap.values[voterMap.keys[i]];
+            if(!item.verified){
+                voters[j] = item;
+                j++;    
+            }
         }
         return voters;
     }
 
+    event VerifyVoter(string _message);
+    function verifyVoter(address _address) public {
+        require(
+                msg.sender == admin,
+                "Only admin can verify voter"
+            );
+        Voter storage voter =  voterMap.values[_address];
+        voter.verified = true;
+        emit VerifyVoter("Voter update success");
+    }
+    
     // function getWinnerIndex() public view returns (uint256 _winner) {
     //     uint256 maxVote = 0;
     //     for (uint256 i = 0; i < teams.length; i++) {

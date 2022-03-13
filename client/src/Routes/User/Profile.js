@@ -4,7 +4,6 @@ import Navbar from "../../Components/Navbar";
 import { Card } from "react-bootstrap";
 import { Link } from "react-router-dom";
 function Profile({ user }) {
-    console.log(user);
     return (
         <>
             <Navbar />
@@ -31,9 +30,15 @@ function Profile({ user }) {
                                 </div>
                                 <h5 className="card-title">
                                     {user.fname} {user.lname}{" "}
-                                    {user.verified
-                                        ? "(Verified)"
-                                        : "(Not Verified)"}
+                                    {user.role === "admin" && "(Admin)"}
+                                    {user.role !== "admin" && (
+                                        <>
+                                            {" "}
+                                            {user.verified
+                                                ? "(Verified)"
+                                                : "(Not Verified)"}
+                                        </>
+                                    )}
                                 </h5>
                                 <hr />
                                 <p className=" mb-0 text-muted">Email</p>
