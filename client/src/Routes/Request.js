@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import Navbar from "../Components/Navbar";
 import Moment from "react-moment";
 import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Request = ({ contract, web3 }) => {
     const [data, setData] = useState(null);
@@ -27,7 +28,7 @@ const Request = ({ contract, web3 }) => {
     const approvedVoter = async (address) => {
         let toastOption = {
             position: "top-right",
-            autoClose: 5000,
+            autoClose: 3000,
             hideProgressBar: false,
             closeOnClick: true,
             pauseOnHover: true,
@@ -46,15 +47,17 @@ const Request = ({ contract, web3 }) => {
             .verifyVoter(address)
             .send({ from: accounts[0] })
             .then((res) => {
+                console.log(res);
                 // !ERROR resolve _message error
-                let message = res.events.VerifyVoter.returnValue._message;
+                // ERROR resolved returnValue -> returnValues
+                let message = res.events.VerifyVoter.returnValues._message;
                 console.log(message);
                 setData((state) => state.filter((item) => item.id !== address));
-                // toast.success("Success ", toastOption);
+                toast.success(message, toastOption);
             })
             .catch((err) => {
                 console.log(err.message);
-                // toast.error("Error ", toastOption);
+                toast.error("Error ", toastOption);
             });
     };
     return (
@@ -132,9 +135,9 @@ const Request = ({ contract, web3 }) => {
                         pauseOnFocusLoss
                         draggable
                         pauseOnHover
-                    />
-         
-                    <ToastContainer /> */}
+                    />*/}
+
+                    <ToastContainer />
                 </div>
             )}
         </>
