@@ -3,7 +3,6 @@ import { connect } from "react-redux";
 import Navbar from "../Components/Navbar";
 import Moment from "react-moment";
 import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 
 const Request = ({ contract, web3 }) => {
     const [data, setData] = useState(null);
@@ -125,18 +124,6 @@ const Request = ({ contract, web3 }) => {
                             </div>
                         </div>
                     </div>
-                    {/* <ToastContainer
-                        position="top-right"
-                        autoClose={5000}
-                        hideProgressBar={false}
-                        newestOnTop={false}
-                        closeOnClick
-                        rtl={false}
-                        pauseOnFocusLoss
-                        draggable
-                        pauseOnHover
-                    />*/}
-
                     <ToastContainer />
                 </div>
             )}

@@ -8,6 +8,7 @@ import RegisterProvide from "./Redirects/RegisterProvide.js";
 import AdminProvider from "./Redirects/AdminProvider.js";
 import Request from "./Routes/Request.js";
 import "react-toastify/dist/ReactToastify.css";
+import Team from "./Routes/Team.js";
 function App() {
     return (
         <>
@@ -20,6 +21,7 @@ function App() {
                     </Route>
                     <Route element={<AdminProvider />}>
                         <Route path="/voter-request" element={<Request />} />
+                        <Route path="/team" element={<Team />} />
                     </Route>
                 </Route>
                 <Route path="/login" element={<Login />} />

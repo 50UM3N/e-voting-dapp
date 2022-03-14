@@ -27,6 +27,11 @@ const Navbar = () => {
                                     Voter Request
                                 </NavLink>
                             </li>
+                            <li className="nav-item active">
+                                <NavLink className="nav-link" to="/team">
+                                    Team
+                                </NavLink>
+                            </li>
                         </ul>
                         <ul className="navbar-nav">
                             <li className="nav-item">
