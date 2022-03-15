@@ -2,6 +2,9 @@ import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import Navbar from "../Components/Navbar";
 import Moment from "react-moment";
+import { Grid, _ } from "gridjs-react";
+import "gridjs/dist/theme/mermaid.css";
+import { h } from "gridjs";
 import { ToastContainer, toast } from "react-toastify";
 
 const Request = ({ contract, web3 }) => {
@@ -70,58 +73,62 @@ const Request = ({ contract, web3 }) => {
                         <div className="card-body">
                             <h5 className="card-title">New Voter Request</h5>
                             <hr />
-                            <div className="table-responsive">
-                                <table className="table table-bordered mb-0">
-                                    <thead>
-                                        <tr className="text-capitalize text-nowrap">
-                                            <th scope="col">#</th>
-                                            <th scope="col">Aadhar Id</th>
-                                            <th scope="col">First Name</th>
-                                            <th scope="col">Last Name</th>
-                                            <th scope="col">Email Address</th>
-                                            <th scope="col">Mobile Number</th>
-                                            <th scope="col">DOB</th>
-                                            <th scope="col"></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {data.map((item, index) => (
-                                            <tr
-                                                key={item.id}
-                                                className="text-nowrap"
-                                            >
-                                                <th scope="row">{index + 1}</th>
-                                                <td>{item.uidai}</td>
-                                                <td>{item.fname}</td>
-                                                <td>{item.lname}</td>
-                                                <td>{item.email}</td>
-                                                <td>{item.mobile}</td>
-                                                <td>
-                                                    <Moment format="DD/MM/YYYY">
-                                                        {
-                                                            new Date(
-                                                                Number(item.dob)
-                                                            )
-                                                        }
-                                                    </Moment>
-                                                </td>
-                                                <td>
-                                                    <button
-                                                        className="btn btn-sm btn-primary"
-                                                        onClick={() =>
-                                                            approvedVoter(
-                                                                item.id
-                                                            )
-                                                        }
-                                                    >
-                                                        Approved
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                            </div>
+                            <Grid
+                                data={data}
+                                columns={[
+                                    {
+                                        data: (row) => row.uidai,
+                                        name: "Aadhar Id",
+                                    },
+                                    {
+                                        data: (row) => row.fname,
+                                        name: "First Name",
+                                    },
+                                    {
+                                        data: (row) => row.lname,
+                                        name: "Last Name",
+                                    },
+                                    {
+                                        data: (row) => row.email,
+                                        name: "Email Address",
+                                    },
+                                    {
+                                        data: (row) => row.mobile,
+                                        name: "Mobile Number",
+                                    },
+                                    {
+                                        data: (row) => row.dob,
+                                        formatter: (data) =>
+                                            _(
+                                                <Moment format="DD/MM/YYYY">
+                                                    {new Date(Number(data))}
+                                                </Moment>
+                                            ),
+                                        name: "DOB",
+                                    },
+                                    {
+                                        data: (row) => row.id,
+                                        name: "Actions",
+                                        formatter: (data) => {
+                                            return h(
+                                                "button",
+                                                {
+                                                    className:
+                                                        "border rounded-md text-white btn btn-primary",
+                                                    onClick: () =>
+                                                        approvedVoter(data),
+                                                },
+                                                "Approve"
+                                            );
+                                        },
+                                    },
+                                ]}
+                                search={false}
+                                pagination={{
+                                    enabled: true,
+                                    limit: 5,
+                                }}
+                            />
                         </div>
                     </div>
                     <ToastContainer />

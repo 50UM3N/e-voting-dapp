@@ -39,6 +39,11 @@ const Navbar = () => {
                                     Login
                                 </Link>
                             </li>
+                            <li className="navbar-nav">
+                                <Link className="nav-link" to="/vote">
+                                    Vote
+                                </Link>
+                            </li>
                         </ul>
                     </div>
                 </div>

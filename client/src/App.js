@@ -9,6 +9,7 @@ import AdminProvider from "./Redirects/AdminProvider.js";
 import Request from "./Routes/Request.js";
 import "react-toastify/dist/ReactToastify.css";
 import Team from "./Routes/Team.js";
+import Vote from "./Routes/Vote.js";
 function App() {
     return (
         <>
@@ -25,6 +26,7 @@ function App() {
                     </Route>
                 </Route>
                 <Route path="/login" element={<Login />} />
+                <Route path="/vote" element={<Vote />} />
             </Routes>
         </>
     );
