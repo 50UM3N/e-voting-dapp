@@ -24,9 +24,9 @@ function App() {
                         <Route path="/voter-request" element={<Request />} />
                         <Route path="/team" element={<Team />} />
                     </Route>
+                    <Route path="/vote" element={<Vote />} />
                 </Route>
                 <Route path="/login" element={<Login />} />
-                <Route path="/vote" element={<Vote />} />
             </Routes>
         </>
     );

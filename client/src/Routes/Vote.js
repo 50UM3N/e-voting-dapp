@@ -39,8 +39,9 @@ const Vote = ({ votingContract, web3 }) => {
             <div className="container d-flex flex-wrap justify-content-start">
                 {data &&
                     data.length !== 0 &&
-                    data.map((item, id) => (
+                    data.map((item, index) => (
                         <div
+                            key={index}
                             className="card mb-3 m-5"
                             style={{ width: "18rem" }}
                         >
