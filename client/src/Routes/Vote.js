@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import Navbar from "../Components/Navbar";
+import { ToastContainer, toast } from "react-toastify";
+import { userAdd } from "../store/actions";
 
-const Vote = ({ votingContract, web3 }) => {
+const Vote = ({ votingContract, user, userAdd }) => {
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -23,8 +25,33 @@ const Vote = ({ votingContract, web3 }) => {
             }
         })();
     }, [votingContract]);
-    const giveVote = (index) => {
-        console.log(index);
+    console.log(user);
+    const giveVote = async (index) => {
+        let accounts = await window.ethereum.request({
+            method: "eth_accounts",
+        });
+
+        await toast.promise(
+            votingContract.contract.methods
+                .vote(index)
+                .send({ from: accounts[0] }),
+            {
+                pending: "Waiting...",
+                success: {
+                    render({ data }) {
+                        user.voted = true;
+                        user.vote = index;
+                        userAdd({ ...user });
+                        return `Successfully vote`;
+                    },
+                },
+                error: {
+                    render({ err }) {
+                        return "Error : " + err.message;
+                    },
+                },
+            }
+        );
     };
     return (
         <>
@@ -54,6 +81,7 @@ const Vote = ({ votingContract, web3 }) => {
                                                     {item.description}
                                                 </p>
                                                 <button
+                                                    disabled={user.voted}
                                                     className="btn btn-primary btn-sm w-100"
                                                     onClick={() =>
                                                         giveVote(index)
@@ -69,6 +97,7 @@ const Vote = ({ votingContract, web3 }) => {
                         </>
                     ))}
             </div>
+            <ToastContainer />
         </>
     );
 };
@@ -76,8 +105,15 @@ const Vote = ({ votingContract, web3 }) => {
 const mapStateToProps = (state) => {
     return {
         votingContract: state.contractReducer,
-        web3: state.web3Reducer,
+        user: state.userReducer,
+    };
+};
+const mapDispatchToProps = (dispatch) => {
+    return {
+        userAdd: (user) => {
+            dispatch(userAdd(user));
+        },
     };
 };
 
-export default connect(mapStateToProps)(Vote);
+export default connect(mapStateToProps, mapDispatchToProps)(Vote);
