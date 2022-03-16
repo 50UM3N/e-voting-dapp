@@ -65,14 +65,15 @@ const Request = ({ contract, web3 }) => {
     return (
         <>
             <Navbar />
-            {loading && <p>Loading...</p>}
-            {error && <p>{error}</p>}
-            {data && (
-                <div className="container my-5">
-                    <div className="card">
-                        <div className="card-body">
-                            <h5 className="card-title">New Voter Request</h5>
-                            <hr />
+
+            <div className="container my-5">
+                <div className="card">
+                    <div className="card-body">
+                        <h5 className="card-title">New Voter Request</h5>
+                        <hr />
+                        {loading && <p>Loading...</p>}
+                        {error && <p>{error}</p>}
+                        {data && data.length !== 0 ? (
                             <Grid
                                 data={data}
                                 columns={[
@@ -129,11 +130,15 @@ const Request = ({ contract, web3 }) => {
                                     limit: 5,
                                 }}
                             />
-                        </div>
+                        ) : (
+                            <p className="text-center">
+                                There is no unverified voter
+                            </p>
+                        )}
                     </div>
-                    <ToastContainer />
                 </div>
-            )}
+            </div>
+            <ToastContainer />
         </>
     );
 };
