@@ -53,7 +53,7 @@ function AuthProvider({
                 .call({ from: accounts[0] });
             if (voter.email)
                 userAdd({
-                    dob: new Date(voter.dob),
+                    dob: new Date(Number(voter.dob)),
                     email: voter.email,
                     fname: voter.fname,
                     lname: voter.lname,
@@ -61,7 +61,7 @@ function AuthProvider({
                     role: voter.role,
                     uidai: voter.uidai,
                     verified: voter.verified,
-                    vote: voter.vote,
+                    vote: Number(voter.vote),
                     voted: voter.voted,
                 });
             contractSuccess(contract);
