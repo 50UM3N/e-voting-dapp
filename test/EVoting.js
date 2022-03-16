@@ -4,10 +4,11 @@ contract("EVoting", (accounts) => {
     before(async () => {
         eVotingContract = await EVotingContract.deployed();
     });
-    // it("Get the admin voter and should be admin", async () => {
-    //     const user = await eVotingContract.getVoter({ from: accounts[0] });
-    //     assert(user.role === "admin");
-    // });
+
+    it("Get the admin voter and should be admin", async () => {
+        const user = await eVotingContract.getVoter({ from: accounts[0] });
+        assert(user.role === "admin");
+    });
 
     it("Register voter and get voter and role should be user and must be unverified", async () => {
         let currentAccount = accounts[1];
@@ -80,7 +81,7 @@ contract("EVoting", (accounts) => {
             }
         );
         await eVotingContract.addTeam(
-            "Manisha Somthing",
+            "Manisha Something",
             "Work for something else",
             "Team 2",
             {
