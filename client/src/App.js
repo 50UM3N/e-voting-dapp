@@ -10,6 +10,7 @@ import Request from "./Routes/Request.js";
 import "react-toastify/dist/ReactToastify.css";
 import Team from "./Routes/Team.js";
 import Vote from "./Routes/Vote.js";
+import Result from "./Routes/Result.js";
 function App() {
     return (
         <>
@@ -25,6 +26,7 @@ function App() {
                         <Route path="/team" element={<Team />} />
                     </Route>
                     <Route path="/vote" element={<Vote />} />
+                    <Route path="/result" element={<Result />} />
                 </Route>
                 <Route path="/login" element={<Login />} />
             </Routes>

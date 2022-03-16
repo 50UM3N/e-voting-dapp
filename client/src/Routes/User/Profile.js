@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import Navbar from "../../Components/Navbar";
+import Moment from "react-moment";
 import { Card } from "react-bootstrap";
 import { Link } from "react-router-dom";
 function Profile({ user }) {
@@ -11,7 +12,7 @@ function Profile({ user }) {
                 {/* TODO: Later here display metamask details */}
                 <Card className="mb-3">
                     <Card.Body>
-                        <p className="text-center text-muted">
+                        <p className="text-center text-muted m-0">
                             You are login with metamask
                         </p>
                     </Card.Body>
@@ -39,6 +40,7 @@ function Profile({ user }) {
                                                 : "(Not Verified)"}
                                         </>
                                     )}
+                                    {user.voted && " (Voted)"}
                                 </h5>
                                 <hr />
                                 <p className=" mb-0 text-muted">Email</p>
@@ -49,6 +51,14 @@ function Profile({ user }) {
                                 <p>{user.mobile}</p>
                                 <p className=" mb-0 text-muted">Aadhar ID</p>
                                 <p>{user.uidai}</p>
+                                <p className=" mb-0 text-muted">
+                                    Date of Birth
+                                </p>
+                                <p>
+                                    <Moment format="DD/MM/YYYY">
+                                        {user.dob}
+                                    </Moment>
+                                </p>
                             </>
                         ) : (
                             <p>

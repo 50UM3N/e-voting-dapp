@@ -1,12 +1,13 @@
+import { connect } from "react-redux";
 import { Link, NavLink } from "react-router-dom";
 
-const Navbar = () => {
+const Navbar = ({ user }) => {
     return (
         <>
             <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
                 <div className="container-fluid">
-                    <Link className="navbar-brand" to="#">
-                        Navbar
+                    <Link className="navbar-brand" to="/">
+                        E Voting
                     </Link>
 
                     <div
@@ -15,21 +16,33 @@ const Navbar = () => {
                     >
                         <ul className="navbar-nav">
                             <li className="nav-item active">
-                                <NavLink className="nav-link" to="/">
-                                    Home
+                                <NavLink className="nav-link" to="/profile">
+                                    Profile
                                 </NavLink>
                             </li>
+                            {user.role === "admin" && (
+                                <>
+                                    <li className="nav-item active">
+                                        <NavLink
+                                            className="nav-link"
+                                            to="/voter-request"
+                                        >
+                                            Voter Request
+                                        </NavLink>
+                                    </li>
+                                    <li className="nav-item active">
+                                        <NavLink
+                                            className="nav-link"
+                                            to="/team"
+                                        >
+                                            Team
+                                        </NavLink>
+                                    </li>
+                                </>
+                            )}
                             <li className="nav-item active">
-                                <NavLink
-                                    className="nav-link"
-                                    to="/voter-request"
-                                >
-                                    Voter Request
-                                </NavLink>
-                            </li>
-                            <li className="nav-item active">
-                                <NavLink className="nav-link" to="/team">
-                                    Team
+                                <NavLink className="nav-link" to="/result">
+                                    Result
                                 </NavLink>
                             </li>
                         </ul>
@@ -39,11 +52,13 @@ const Navbar = () => {
                                     Vote
                                 </Link>
                             </li>
-                            <li className="nav-item">
-                                <Link className="nav-link" to="/login">
-                                    Login
-                                </Link>
-                            </li>
+                            {!user && (
+                                <li className="nav-item">
+                                    <Link className="nav-link" to="/login">
+                                        Login
+                                    </Link>
+                                </li>
+                            )}
                         </ul>
                     </div>
                 </div>
@@ -52,4 +67,10 @@ const Navbar = () => {
     );
 };
 
-export default Navbar;
+const mapStateToProps = (state) => {
+    return {
+        user: state.userReducer,
+    };
+};
+
+export default connect(mapStateToProps)(Navbar);

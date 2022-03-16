@@ -259,17 +259,18 @@ contract evoting {
         emit VerifyVoter("Voter update success");
     }
 
-    // function getWinnerIndex() public view returns (uint256 _winner) {
-    //     uint256 maxVote = 0;
-    //     for (uint256 i = 0; i < teams.length; i++) {
-    //         if (teams[i].voteCount > maxVote) {
-    //             maxVote = teams[i].voteCount;
-    //             _winner = i;
-    //         }
-    //     }
-    // }
+    function getWinnerIndex() private view returns (uint256 _winner) {
+        uint256 maxVote = 0;
+        for (uint256 i = 0; i < teams.length; i++) {
+            if (teams[i].voteCount > maxVote) {
+                maxVote = teams[i].voteCount;
+                _winner = i;
+            }
+        }
+    }
 
-    // function getWinner() public view returns (string _winner) {
-    //     _winner = teams[getWinnerIndex()].name;
-    // }
+    function getWinner() public view returns (Team memory _winner) {
+        require(teams.length != 0, "There is no teams added yet");
+        _winner = teams[getWinnerIndex()];
+    }
 }

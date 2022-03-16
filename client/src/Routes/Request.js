@@ -38,29 +38,36 @@ const Request = ({ contract, web3 }) => {
             progress: undefined,
         };
         if (!web3.web3.utils.isAddress(address)) {
-            console.log("invalid address");
+            toast.error("Invalid address error", toastOption);
             return;
         }
         let accounts = await window.ethereum.request({
             method: "eth_accounts",
         });
-        console.log({ from: accounts[0] });
-        contract.contract.methods
-            .verifyVoter(address)
-            .send({ from: accounts[0] })
-            .then((res) => {
-                console.log(res);
-                // !ERROR resolve _message error
-                // ERROR resolved returnValue -> returnValues
-                let message = res.events.VerifyVoter.returnValues._message;
-                console.log(message);
-                setData((state) => state.filter((item) => item.id !== address));
-                toast.success(message, toastOption);
-            })
-            .catch((err) => {
-                console.log(err.message);
-                toast.error("Error ", toastOption);
-            });
+        await toast.promise(
+            contract.contract.methods
+                .verifyVoter(address)
+                .send({ from: accounts[0] }),
+
+            {
+                pending: "Waiting...",
+                success: {
+                    render({ data }) {
+                        let message =
+                            data.events.VerifyVoter.returnValues._message;
+                        setData((state) =>
+                            state.filter((item) => item.id !== address)
+                        );
+                        return message;
+                    },
+                },
+                error: {
+                    render({ err }) {
+                        return "Error : " + err.message;
+                    },
+                },
+            }
+        );
     };
     return (
         <>

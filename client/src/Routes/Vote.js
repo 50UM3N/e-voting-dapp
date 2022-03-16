@@ -25,7 +25,6 @@ const Vote = ({ votingContract, user, userAdd }) => {
             }
         })();
     }, [votingContract]);
-    console.log(user);
     const giveVote = async (index) => {
         let accounts = await window.ethereum.request({
             method: "eth_accounts",
