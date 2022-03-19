@@ -20,7 +20,7 @@ const Navbar = ({ user }) => {
                                     Profile
                                 </NavLink>
                             </li>
-                            {user.role === "admin" && (
+                            {user && user.role === "admin" && (
                                 <>
                                     <li className="nav-item active">
                                         <NavLink

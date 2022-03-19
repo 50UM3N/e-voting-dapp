@@ -28,16 +28,16 @@ const Result = ({ voteContract, web3 }) => {
                 let winner = await voteContract.contract.methods
                     .getWinner()
                     .call({ form: accounts[0] });
-                setData(teams);
+                // setData(teams);
                 setWinner(winner);
-                setLoading(false);
+                // setLoading(false);
             } catch (err) {
                 setError(err.name);
                 setLoading(false);
             }
         })();
     }, [voteContract]);
-
+    console.log(winner);
     return (
         <>
             <Navbar />

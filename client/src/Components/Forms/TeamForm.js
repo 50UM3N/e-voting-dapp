@@ -37,9 +37,9 @@ const TeamForm = ({ voterContract, web3, onSuccess = null }) => {
                 )
                 .send({ from: address[0] }),
             {
-                pending: "Promise is pending",
-                success: "Promise resolved 👌",
-                error: "Promise rejected 🤯",
+                pending: "Waiting for conformation",
+                success: "Team is added 👌",
+                error: "Error in adding team 🤯",
             },
             toastOption
         );
