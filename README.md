@@ -9,7 +9,6 @@ The account used to deploy the contract will be the admin account.
 - User can login to his/her account using metamask and register for voting. User must provide first name, last name, email, UIDAI, date of birth (18 or above).
 - User must be verified by the admin to give vote.
 - After verification user is eligible to give vote to a team.
-- After that user can see the result. 
 
 
 ## Dependency
